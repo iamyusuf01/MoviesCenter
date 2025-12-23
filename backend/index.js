@@ -29,9 +29,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", userRouter);
-// app.use("/api/user", userRouter);
-// app.use("/api/restaurant", restaurantRouter);
-// app.use("/api/menu", menuRouter );
+
 
 app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`);
