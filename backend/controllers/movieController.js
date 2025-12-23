@@ -1,5 +1,5 @@
-import { uploadOnCloudinary } from "../config/cloudinary";
-import Movie from "../models/movies.model";
+import { uploadOnCloudinary } from "../config/cloudinary.js";
+import Movie from "../models/moviesModel.js";
 
 export const addMovies = async (req, res) => {
   try {

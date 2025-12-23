@@ -3,7 +3,8 @@ import "dotenv/config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
-import userRouter from './routes/user.router.js'
+import userRouter from './routes/userRouter.js'
+import movieRouter from './routes/movieRouter.js'
 
 
 const app = express();
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/admin", movieRouter);
 
 
 app.listen(PORT, () => {

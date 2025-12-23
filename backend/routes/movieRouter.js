@@ -1,6 +1,6 @@
 import express from 'express'
-import verifyJwt from '../middleware/auth.middleware.js'
-import { addMovies, deleteMovie, getAllMovies, updateMovie } from '../controllers/movie.controller.js'
+import verifyJwt from '../middlewares/authMiddleware.js'
+import { addMovies, deleteMovie, getAllMovies, updateMovie } from '../controllers/movieController.js'
 
 const router = express.Router()
 
