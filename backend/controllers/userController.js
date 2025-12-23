@@ -6,16 +6,20 @@ import jwt from "jsonwebtoken";
 export const registerUser = async (req, res) => {
   //fetchin the data from request body
   try {
-    const { name, email, password } = req.body;
+    const { email, phone, password } = req.body;
     //check Validation
-    if (!name || !email || !password) {
+    if ((!email && !phone) || !password) {
       return res.json({
         success: false,
         message: "All fields are required",
       });
     }
     //check User Exists aur Not
-    const alreadyUser = await User.findOne({ email });
+    const conditions = [];
+    if (email) conditions.push({ email });
+    if (phone) conditions.push({ phone });
+
+    const alreadyUser = await User.findOne({ $or: conditions });
     if (alreadyUser) {
       return res.json({
         success: false,
@@ -27,8 +31,8 @@ export const registerUser = async (req, res) => {
 
     //Create User in DataBase
     const user = new User({
-      name,
       email,
+      phone,
       password: hashPassword,
     });
 
@@ -138,7 +142,7 @@ export const refreshAccessToken = async (req, res) => {
 export const login = async (req, res) => {
   //fetching user from req body
   try {
-    const { email, password } = req.body;
+    const { email,  password } = req.body;
     //check validation
     if (!email || !password) {
       return res.json({
@@ -268,7 +272,6 @@ export const resetPassword = async (req, res) => {
   }
 };
 
-
 //Authenticate
 export const isAuthenticate = async (req, res) => {
   try {
@@ -302,22 +305,23 @@ export const updateUserRole = async (req, res) => {
       });
     }
 
-    const user = await User.findByIdAndUpdate(req.user?._id,
-      {role},
-      {new: true}
+    const user = await User.findByIdAndUpdate(
+      req.user?._id,
+      { role },
+      { new: true }
     ).select("-password");
 
-    if(!user){
+    if (!user) {
       return res.json({
         success: false,
-        message: "User not found"
-      })
+        message: "User not found",
+      });
     }
 
     return res.json({
       success: true,
       message: "Role updated succesfully",
-      user
-    })
+      user,
+    });
   } catch (error) {}
 };

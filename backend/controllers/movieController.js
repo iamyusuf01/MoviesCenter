@@ -4,6 +4,7 @@ import Movie from "../models/moviesModel.js";
 export const addMovies = async (req, res) => {
   try {
     const { title, description, duration, ageRating, releaseYear } = req.body;
+
     if (!title || !description || !duration || !ageRating || !releaseYear) {
       return res.status(400).json({
         success: false,
@@ -11,7 +12,7 @@ export const addMovies = async (req, res) => {
       });
     }
 
-    const posterLocalPath = req.files?.avatar?.[0]?.path;
+    const posterLocalPath = req.files?.poster?.[0]?.path;
     if (!posterLocalPath) {
       return res.status(400).json({
         success: false,
@@ -49,24 +50,26 @@ export const addMovies = async (req, res) => {
   }
 };
 
-export const getAllMovies = async (res) => {
+export const getAllMovies = async (req, res) => {
   try {
     const movies = await Movie.find();
-    if (!movies) {
-      return res.json({
+
+    if (movies.length === 0) {
+      return res.status(404).json({
         success: false,
-        message: "Movies not found",
+        message: "No movies found",
       });
     }
 
-    return res.json({
-      succes: true,
-      message: "Fetching all movies successfully",
+    return res.status(200).json({
+      success: true,
+      message: "Fetched all movies successfully",
+      movies,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal server error",
     });
   }
 };
@@ -87,6 +90,58 @@ export const updateMovie = async (req, res) => {
       });
     }
 
+    const movie = await Movie.findByIdAndUpdate(movieId, {
+      title,
+      description,
+      duration,
+    });
+
+    return res.json({
+      success: true,
+      message: "Movie updated successfully",
+      movie: movie,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteMovie = async (req, res) => {
+  try {
+    const { movieId } = req.body;
+    if (!movieId) {
+      return res.json({
+        success: false,
+        message: "Movie Id no found",
+      });
+    }
+
+    const movie = await Movie.findByIdAndDelete(movieId, {});
+    if (!movie) {
+      return res.json({
+        success: false,
+        message: "movie not found",
+      });
+    }
+
+    return res.json({
+      success: false,
+      message: "delete movie successfully",
+      movie,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updatePoster = async (req, res) => {
+  try {
     const posterLocalPath = req.file?.path;
     if (!posterLocalPath) {
       return res.json({
@@ -103,17 +158,59 @@ export const updateMovie = async (req, res) => {
       });
     }
 
-    const movie = await Movie.findByIdAndUpdate(movieId, {
-      title,
-      description,
-      duration,
+    const movie = await Movie.findByIdAndUpdate(req.user?._id, {
       poster: poster.url,
     });
 
-    return res.json({
+    return res.status(201).json({
       success: true,
-      message: "Movie updated successfully",
+      message: "Poster Upload Successfully",
       movie,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+    
+  }
+};
+
+export const getSortedMovies = async (req, res) => {
+  try {
+    const { sortBy = "name", order = "asc" } = req.query;
+
+    const sortFields = {
+      name: "title",
+      rating: "rating",
+      releaseYear: "releaseYear",
+      duration: "duration",
+    };
+
+    if (!sortFields[sortBy]) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid sort field",
+      });
+    }
+
+    const sortOrder = order === "desc" ? -1 : 1;
+
+    const movies = await Movie.find().sort({
+      [sortFields[sortBy]]: sortOrder,
+    });
+
+    if (!movies.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No movies found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Movies sorted successfully",
+      movies,
     });
   } catch (error) {
     return res.status(500).json({
@@ -123,30 +220,41 @@ export const updateMovie = async (req, res) => {
   }
 };
 
-export const deleteMovie = async (req, res) => {
+
+export const searchMovies = async (req, res) => {
   try {
-    const {movieId} = req.body;
-    if(!movieId){
-        return res.json({
-            success: false,
-            message: 'Movie Id no found'
-        })
+    const { title, minRating, releaseYear, duration } =
+      req.query;
+
+      const query = {}
+
+    if (title) {
+      query.title = { $regex: title, $options: "i" };
+    }
+    if (minRating) {
+      query.rating = {$gte: Number(minRating)};
     }
 
-    const movie = await Movie.findByIdAndDelete(movieId, {})
-    if(!movie){
-        return res.json({
-            success: false,
-            message: 'movie not found'
-        })
+    if(releaseYear){
+      query.releaseYear = Number(releaseYear)
     }
-    
-    return res.json({
+
+    if(duration){
+      query.duration = {$regex: duration, $options: "i"}
+    }
+
+    const movies = await Movie.find(query)
+    if(movies.length === 0){
+      return res.status(404).json({
         success: false,
-        message: 'delete movie successfully',
-        movie
+        message: 'no movies found'
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'Movies fetched successfully',
+      movies
     })
-
   } catch (error) {
     return res.status(500).json({
       success: false,
