@@ -223,42 +223,38 @@ export const getSortedMovies = async (req, res) => {
 
 export const searchMovies = async (req, res) => {
   try {
-    const { title, minRating, releaseYear, duration } =
-      req.query;
+    const { q } = req.query;
 
-      const query = {}
-
-    if (title) {
-      query.title = { $regex: title, $options: "i" };
-    }
-    if (minRating) {
-      query.rating = {$gte: Number(minRating)};
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query is required",
+      });
     }
 
-    if(releaseYear){
-      query.releaseYear = Number(releaseYear)
-    }
+    const movies = await Movie.find({
+      $or: [
+        { title: { $regex: q, $options: "i" } },
+        { description: { $regex: q, $options: "i" } },
+      ],
+    });
 
-    if(duration){
-      query.duration = {$regex: duration, $options: "i"}
-    }
-
-    const movies = await Movie.find(query)
-    if(movies.length === 0){
+    if (!movies.length) {
       return res.status(404).json({
         success: false,
-        message: 'no movies found'
-      })
+        message: "No movies found",
+      });
     }
+
     return res.status(200).json({
       success: true,
-      message: 'Movies fetched successfully',
-      movies
-    })
+      message: "Movies fetched successfully",
+      movies,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.messsage
     });
   }
 };
