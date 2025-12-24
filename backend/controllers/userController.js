@@ -1,25 +1,23 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { modelNames } from "mongoose";
 
 //User Registration
 export const registerUser = async (req, res) => {
   //fetchin the data from request body
   try {
-    const { email, phone, password } = req.body;
+    const { name, email, password } = req.body;
     //check Validation
-    if ((!email && !phone) || !password) {
+    if (!email || !name || !password) {
       return res.json({
         success: false,
         message: "All fields are required",
       });
     }
     //check User Exists aur Not
-    const conditions = [];
-    if (email) conditions.push({ email });
-    if (phone) conditions.push({ phone });
 
-    const alreadyUser = await User.findOne({ $or: conditions });
+    const alreadyUser = await User.findOne({email});
     if (alreadyUser) {
       return res.json({
         success: false,
@@ -32,7 +30,7 @@ export const registerUser = async (req, res) => {
     //Create User in DataBase
     const user = new User({
       email,
-      phone,
+      name,
       password: hashPassword,
     });
 
@@ -275,6 +273,12 @@ export const resetPassword = async (req, res) => {
 //Authenticate
 export const isAuthenticate = async (req, res) => {
   try {
+    if(!req.user){
+      return res.json({
+        success: false,
+        message: 'User not found'
+      })
+    }
     return res.json({
       success: true,
       message: "User is authenticated",
@@ -298,7 +302,7 @@ export const updateUserRole = async (req, res) => {
       });
     }
 
-    if (!["user", "admin", "seller"].includes(role)) {
+    if (!["user", "admin"].includes(role)) {
       return res.json({
         success: false,
         message: "Invalid role",
@@ -325,3 +329,31 @@ export const updateUserRole = async (req, res) => {
     });
   } catch (error) {}
 };
+
+export const getUserData = async (req, res) => {
+  try {
+    // const { userId } = req.body;
+
+    const user = await User.findById(req.user);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    res.json({
+      success: true,
+      userData: {
+        name: user.name,
+        email: user.email,
+      }
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+

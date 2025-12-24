@@ -3,18 +3,19 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
-  const { isEducator } = useContext(AppContext);
+//   const { isEducator } = useContext();
   const menuItems = [
     // { name: "Dashboard", path: "/admin", },
     { name: "Add Movies", path: "/admin/add-movies",},
-    { name: "Delete Movie", path: "/admin/delete-movie"},
+    { name: "Delete Movie", path: "/admin/delete-movie/:id"},
     {
       name: "Update Movie",
-      path: "/admin/edit",
+      path: "/admin/edit-movie/:id",
     },
   ];
   return (
-    isEducator && (
+    // isEducator && 
+    (
       <div
         className="md:w-64 w-16 border-r min-h-screen text-base border-gray-500 py-2
         flex flex-col"
@@ -33,7 +34,7 @@ const Sidebar = () => {
                 : "hover:bg-gray-100/90 border-r[6px] border-white hover:border-gray-100/90"
             }`}
           >
-            <img  alt="icon" className="w-6 h-6" />
+            {/* <img  alt="" className="w-6 h-6" /> */}
             <p className="md:block hidden text-center">{item.name}</p>
           </NavLink>
         ))}

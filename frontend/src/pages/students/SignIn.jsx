@@ -3,13 +3,34 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AppContext } from "../../context/AppContext";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
+  const { backendUrl, isLoggedIn, setIsLoggedIn, getUserData  } = useContext(AppContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [email, setEmail] = useState(false);
-  const [password, setPassword] = useState(false);
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post("http://localhost:4000/api/v1/user/login",  {
+        email,
+        password,
+      }, {withCrendential: true});
+      data.success ? toast.success(data.success) : toast.error(data.message);
+      setIsLoggedIn(true) && getUserData()
+      navigate("/");
+
+      console.log(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <Box
@@ -43,36 +64,35 @@ const SignIn = () => {
         </Typography>
 
         {/* Input */}
-        <form>
-          {!email && (
-            <div>
-              <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-                Enter mobile number or email
-              </Typography>
+        <form onSubmit={loginUser}>
+          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
+            Enter your email
+          </Typography>
 
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Email or mobile number"
-                sx={{ mb: 2 }}
-              />
-            </div>
-          )}
-          {email && !password (
-            <div>
-              <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-                Enter password
-              </Typography>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Enter your Email"
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            sx={{ mb: 2 }}
+          />
+          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
+            Enter password
+          </Typography>
 
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Email or mobile number"
-                sx={{ mb: 2 }}
-              />
-            </div>
-          )}
+          <TextField
+            fullWidth
+            size="small"
+            type="password"
+            placeholder="Enter your password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            sx={{ mb: 2 }}
+          />
           <Button
+            type="submit"
             fullWidth
             sx={{
               backgroundColor: "#ffd814",

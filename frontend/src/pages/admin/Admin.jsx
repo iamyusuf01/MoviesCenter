@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "../../components/admin/Sidebar";
 import Footer from "../../components/admin/Footer";
 import Navbar from "../../components/admin/Navbar";
+import { Outlet } from "react-router";
 
 const Admin = () => {
   return (

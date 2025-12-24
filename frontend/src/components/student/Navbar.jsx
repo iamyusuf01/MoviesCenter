@@ -7,12 +7,32 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from '@mui/icons-material/Search';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import SearchIcon from "@mui/icons-material/Search";
+import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import { Link, NavLink, useNavigate } from "react-router";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-    const navigate = useNavigate()
+  const {isLoggedIn, setIsLoggedIn } = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const logoutUser = async() => {
+    try {
+      const {data} = await axios.post('http://localhost:4000/api/v1/user/logout')
+      if(data.success){
+        toast.success(data.success)
+        setIsLoggedIn(false)
+        navigate('/')
+      } else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
   return (
     <AppBar
       position="static"
@@ -23,7 +43,7 @@ const Navbar = () => {
     >
       <Toolbar sx={{ display: "flex", gap: 2 }}>
         <Button
-          onClick={() => navigate('/')} 
+          onClick={() => navigate("/")}
           sx={{
             backgroundColor: "#f5c518",
             color: "#000",
@@ -79,27 +99,39 @@ const Navbar = () => {
 
           {/* Search Icon */}
           <IconButton>
-            <SearchIcon  />
+            <SearchIcon />
           </IconButton>
         </Box>
 
         {/* Right Side */}
-        <Button sx={{ color: "#fff", textTransform: "none" }}>
-          IMDbPro
-        </Button>
+        <Button sx={{ color: "#fff", textTransform: "none" }}>IMDbPro</Button>
 
-        <Button startIcon= {<TurnedInNotIcon/>} sx={{ color: "#fff", textTransform: "none" }}>
+        <Button
+          startIcon={<TurnedInNotIcon />}
+          sx={{ color: "#fff", textTransform: "none" }}
+        >
           Watchlist
         </Button>
 
-        <Button onClick={() => navigate('/sign-in')}   sx={{ color: "#fff", textTransform: "none" }}>
-          Sign In
-        </Button>
+        { isLoggedIn ? (
+          <Button
+            onClick={logoutUser}
+            sx={{ color: "#fff", textTransform: "none" }}
+          >
+             Logout
+          </Button>
+        ) : (
+          <Button
+            onClick={() => navigate('/sign-in')}
+            sx={{ color: "#fff", textTransform: "none" }}
+          >
+            SignIn
+          </Button>
+        )}
 
         {/* <Button sx={{ color: "#fff", textTransform: "none" }}>
           EN
         </Button> */}
-
       </Toolbar>
     </AppBar>
   );

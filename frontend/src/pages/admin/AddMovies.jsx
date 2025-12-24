@@ -5,7 +5,6 @@ import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { Link } from "react-router";
 
 const AddMovies = () => {
   return (
@@ -23,7 +22,7 @@ const AddMovies = () => {
         <Typography sx={{ fontWeight: "bold", fontSize: 26 }}>IMDb</Typography>
         <Divider orientation="vertical" flexItem />
         <Typography sx={{ fontWeight: "bold", fontSize: 26 }}>
-          Sign Up
+          Add Movies
         </Typography>
       </Box>
 
@@ -35,58 +34,55 @@ const AddMovies = () => {
           p: 3,
         }}
       >
-        <Typography variant="h5" sx={{ mb: 3 }}>
-          Create account
-        </Typography>
-
         <form>
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Your name
+            Title
           </Typography>
           <TextField
             fullWidth
             size="small"
-            placeholder="First and last name"
+            placeholder="Add Title"
             sx={{ mb: 2 }}
           />
 
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Email
+            Description
           </Typography>
           <TextField
             fullWidth
             size="small"
-            placeholder="Enter your email"
+            placeholder="Add Description"
             sx={{ mb: 2 }}
           />
-          {/* Password */}
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Password
+            Duration
           </Typography>
           <TextField
             fullWidth
             size="small"
-            type="password"
-            placeholder="At least 6 characters"
+            type="text"
+            placeholder="eg: 2h 30m"
             sx={{ mb: 1 }}
           />
 
-          {/* Password Info */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-            <Typography sx={{ fontSize: 13 }}>
-              Passwords must be at least 6 characters.
-            </Typography>
-          </Box>
-
-          {/* Re-enter Password */}
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Re-enter password
+            Age Limit
           </Typography>
           <TextField
             fullWidth
             size="small"
-            type="password"
-            placeholder="Re type password"
+            type="text"
+            placeholder="Age Limit"
+            sx={{ mb: 3 }}
+          />
+          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
+            Release Date
+          </Typography>
+          <TextField
+            fullWidth
+            size="small"
+            type="number"
+            placeholder="eg: 2025"
             sx={{ mb: 3 }}
           />
           <Button
@@ -103,29 +99,9 @@ const AddMovies = () => {
               },
             }}
           >
-            Create your Account
+            Add Movie
           </Button>
         </form>
-
-        {/* Terms */}
-        <Typography sx={{ fontSize: 12, color: "#555" }} py={2}>
-          By creating an account, you agree{" "}
-          <Link href="#" underline="hover">
-            Conditions of Use
-          </Link>{" "}
-          and{" "}
-          <Link href="#" underline="hover">
-            Privacy Notice
-          </Link>
-          .
-        </Typography>
-        <Divider orientation="horizontal" flexItem />
-        <Typography sx={{ fontSize: 16, color: "#555" }} py={2}>
-          Already have an account{" "}
-          <Link to={"/sign-in"} underline="hover">
-            Signin
-          </Link>{" "}
-        </Typography>
       </Box>
     </Box>
   )

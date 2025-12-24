@@ -6,15 +6,17 @@ import SignIn from "./pages/students/SignIn";
 import Admin from "./pages/admin/Admin";
 import AddMovies from "./pages/admin/AddMovies";
 import UpdateMovie from "./pages/admin/UpdateMovie";
+import DeleteMovie from "./pages/admin/DeleteMovie";
 import Movie from "./components/student/Movie";
 import AllMovies from "./components/student/AllMovies";
-
+import  { Toaster } from 'react-hot-toast';
 
 function App() {
   const isAdminRoute = useMatch("/admin/*");
   return (
     <div>
         {!isAdminRoute && <Navbar/>}
+        <Toaster/>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/registration" element={<CreateAccount/>} />
@@ -24,9 +26,9 @@ function App() {
 
         {/* Admin */}
         <Route path="/admin" element={<Admin/>} />
-        <Route path="/add-movies" element={<AddMovies/>} />
-        <Route path="/edit-movie/:id" element={<UpdateMovie/>} />
-        <Route path="/delete-movie/:id" element={<UpdateMovie/>} />
+        <Route path="admin/add-movies" element={<AddMovies/>} />
+        <Route path="admin/edit-movie/:id" element={<UpdateMovie/>} />
+        <Route path="admin/delete-movie/:id" element={<DeleteMovie/>} />
         
       </Routes>
     </div>

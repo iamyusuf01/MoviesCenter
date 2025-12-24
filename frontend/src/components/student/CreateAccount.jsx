@@ -3,11 +3,39 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
-import { Link } from "react-router";
+import axios from "axios";
+import { useContext, useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router";
+import { AppContext } from "../../context/AppContext";
 
 const CreateAccount = () => {
-  const [email, setEmail] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { setInLoggedIn } = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        "http://localhost:4000/api/v1/user/register",
+        { name, email, password },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        toast.success("User Register Successfully");
+        navigate("/sign-in");
+        console.log(data)
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
     <Box
       sx={{
@@ -39,7 +67,7 @@ const CreateAccount = () => {
           Create account
         </Typography>
 
-        <form>
+        <form onSubmit={handleClick}>
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
             Your name
           </Typography>
@@ -47,6 +75,8 @@ const CreateAccount = () => {
             fullWidth
             size="small"
             placeholder="First and last name"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
             sx={{ mb: 2 }}
           />
 
@@ -57,6 +87,8 @@ const CreateAccount = () => {
             fullWidth
             size="small"
             placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
             sx={{ mb: 2 }}
           />
           {/* Password */}
@@ -68,6 +100,8 @@ const CreateAccount = () => {
             size="small"
             type="password"
             placeholder="At least 6 characters"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
             sx={{ mb: 1 }}
           />
 
@@ -77,19 +111,8 @@ const CreateAccount = () => {
               Passwords must be at least 6 characters.
             </Typography>
           </Box>
-
-          {/* Re-enter Password */}
-          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Re-enter password
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            type="password"
-            placeholder="Re type password"
-            sx={{ mb: 3 }}
-          />
           <Button
+          type="submit"
             fullWidth
             sx={{
               backgroundColor: "#ffd814",
