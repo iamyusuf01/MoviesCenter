@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { assets } from "../../assets/assets";
-import { AppContext } from "../../context/AppContext";
+// import { AppContext } from "../../context/AppContext";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   const { isEducator } = useContext(AppContext);
   const menuItems = [
-    { name: "Dashboard", path: "/admin", icon: assets.home_icon },
-    { name: "Add Course", path: "/admin/add-course", icon: assets.add_icon },
+    // { name: "Dashboard", path: "/admin", },
+    { name: "Add Movies", path: "/admin/add-movies",},
+    { name: "Delete Movie", path: "/admin/delete-movie"},
     {
-      name: "Student Enrolled",
-      path: "/educator/student-enrolled",
+      name: "Update Movie",
+      path: "/admin/edit",
     },
   ];
   return (
@@ -23,7 +23,7 @@ const Sidebar = () => {
           <NavLink
             to={item.path}
             key={item.name}
-            end={item.path == "/educator"}
+            end={item.path == "/admin"}
             className={({
               isActive,
             }) => `flex items-center md:flex-row flex-col md:justify-start justify-center
@@ -33,7 +33,7 @@ const Sidebar = () => {
                 : "hover:bg-gray-100/90 border-r[6px] border-white hover:border-gray-100/90"
             }`}
           >
-            <img src={item.icon} alt="icon" className="w-6 h-6" />
+            <img  alt="icon" className="w-6 h-6" />
             <p className="md:block hidden text-center">{item.name}</p>
           </NavLink>
         ))}
