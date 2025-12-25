@@ -5,31 +5,28 @@ import CreateAccount from "./components/student/CreateAccount";
 import SignIn from "./pages/students/SignIn";
 import Admin from "./pages/admin/Admin";
 import AddMovies from "./pages/admin/AddMovies";
-import UpdateMovie from "./pages/admin/UpdateMovie";
-import DeleteMovie from "./pages/admin/DeleteMovie";
-import Movie from "./components/student/Movie";
-import AllMovies from "./components/student/AllMovies";
-import  { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import Dashboard from "./pages/admin/Dashboard";
+import Movies from "./pages/admin/Movies";
 
 function App() {
   const isAdminRoute = useMatch("/admin/*");
   return (
     <div>
-        {!isAdminRoute && <Navbar/>}
-        <Toaster/>
+      {!isAdminRoute && <Navbar />}
+      <Toaster />
       <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/registration" element={<CreateAccount/>} />
-        <Route path="/sign-in" element={<SignIn/>} />
-        <Route path="/all-movies" element={<AllMovies/>} />
-        <Route path="/movie/:id" element={<Movie/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/registration" element={<CreateAccount />} />
+        <Route path="/sign-in" element={<SignIn />} />
 
-        {/* Admin */}
-        <Route path="/admin" element={<Admin/>} />
-        <Route path="admin/add-movies" element={<AddMovies/>} />
-        <Route path="admin/edit-movie/:id" element={<UpdateMovie/>} />
-        <Route path="admin/delete-movie/:id" element={<DeleteMovie/>} />
-        
+        {/* Admin routes */}
+        <Route path="/admin" element={<Admin />}>
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="movies" element={<Movies />} />
+          <Route path="add-movie" element={<AddMovies />} />
+        </Route>
       </Routes>
     </div>
   );
