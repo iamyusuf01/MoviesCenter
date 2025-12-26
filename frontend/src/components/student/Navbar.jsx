@@ -1,22 +1,19 @@
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
-import {  useNavigate } from "react-router";
+import {  useNavigate, useParams } from "react-router";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Search from "./Search";
 
 const Navbar = () => {
   const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
+  const {q} = useParams()
   const navigate = useNavigate();
 
   const logoutUser = async () => {
@@ -63,48 +60,7 @@ const Navbar = () => {
         >
           Menu
         </Button>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "#fff",
-            borderRadius: "4px",
-            flexGrow: 1,
-            height: "36px",
-            overflow: "hidden",
-          }}
-        >
-        
-          {/* Dropdown */}
-          <Select
-            defaultValue="all"
-            sx={{
-              height: "100%",
-              borderRight: "1px solid #ddd",
-              ".MuiSelect-select": {
-                padding: "6px 12px",
-              },
-            }}
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="movies">Movies</MenuItem>
-            <MenuItem value="tv">TV Shows</MenuItem>
-          </Select>
-
-          {/* Input */}
-          <InputBase
-            placeholder="Search IMDb"
-            sx={{
-              paddingX: 2,
-              flexGrow: 1,
-            }}
-          />
-
-          {/* Search Icon */}
-          <IconButton>
-            <SearchIcon />
-          </IconButton>
-        </Box>
+        <Search/>
 
         {/* Right Side */}
         <Button sx={{ color: "#fff", textTransform: "none" }}>IMDbPro</Button>

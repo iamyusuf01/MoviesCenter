@@ -8,7 +8,8 @@ import AddMovies from "./pages/admin/AddMovies";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./pages/admin/Dashboard";
 import Movies from "./pages/admin/Movies";
-import MoviesPage from "./pages/students/MoviePage";
+import Search from "./components/student/Search";
+import MovieList from "./pages/students/MoviesList";
 
 function App() {
   const isAdminRoute = useMatch("/admin/*");
@@ -20,7 +21,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/registration" element={<CreateAccount />} />
         <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/search" element={<MoviesPage />} />
+        {/* <Route path="/search" element={<Search />} /> */}
+        <Route path="/search" element={<MovieList />} />
         
 
         {/* Admin routes */}

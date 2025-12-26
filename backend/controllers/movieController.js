@@ -172,7 +172,6 @@ export const updatePoster = async (req, res) => {
       success: false,
       message: error.message,
     });
-    
   }
 };
 
@@ -220,16 +219,13 @@ export const getSortedMovies = async (req, res) => {
   }
 };
 
-
 export const searchMovies = async (req, res) => {
   try {
     const { q } = req.query;
 
     if (!q) {
-      return res.status(400).json({
-        success: false,
-        message: "Search query is required",
-      });
+      const movies = await Movie.find();
+      return res.json({ success: true, movies });
     }
 
     const movies = await Movie.find({
@@ -239,22 +235,14 @@ export const searchMovies = async (req, res) => {
       ],
     });
 
-    if (!movies.length) {
-      return res.status(404).json({
-        success: false,
-        message: "No movies found",
-      });
-    }
-
     return res.status(200).json({
       success: true,
-      message: "Movies fetched successfully",
       movies,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.messsage
+      message: error.messsage,
     });
   }
 };
