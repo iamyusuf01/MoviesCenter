@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ImageListItem,
   Paper,
   Table,
   TableBody,
@@ -9,6 +10,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import Avatar from "@mui/material/Avatar";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
@@ -30,14 +35,14 @@ const Movies = () => {
       );
 
       data.success && setMovie(data.movies);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    if (isAdmin) {
+    if (!isAdmin) {
       fetchAdminMovies();
     }
   }, [isAdmin]);
@@ -60,10 +65,12 @@ const Movies = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Poster</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Duration</TableCell>
-              <TableCell>Age</TableCell>
-              <TableCell>Year</TableCell>
+              <TableCell align="center">Age</TableCell>
+              <TableCell align="center">Year</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -71,15 +78,33 @@ const Movies = () => {
             {movie?.length ? (
               movie.map((item) => (
                 <TableRow key={item._id}>
+                  <TableCell>
+                    <Avatar
+                      variant="rounded"
+                      src={item.poster}
+                      alt={item.title}
+                      sx={{ width: 56, height: 80, }}
+                    />
+                  </TableCell>
+
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.duration}</TableCell>
                   <TableCell align="center">{item.ageRating}+</TableCell>
                   <TableCell align="center">{item.releaseYear}</TableCell>
+
+                  <TableCell align="center">
+                    <IconButton color="primary">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} align="center">
+                <TableCell colSpan={6} align="center">
                   No movies available
                 </TableCell>
               </TableRow>

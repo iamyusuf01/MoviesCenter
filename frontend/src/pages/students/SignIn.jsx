@@ -10,7 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const SignIn = () => {
-  const { backendUrl, isLoggedIn, setIsLoggedIn, getUserData  } = useContext(AppContext);
+  const { backendUrl, isLoggedIn, setIsLoggedIn, getUserData, setIsAdmin  } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -22,9 +22,15 @@ const SignIn = () => {
         email,
         password,
       }, {withCrendential: true});
-      data.success ? toast.success(data.success) : toast.error(data.message);
-      setIsLoggedIn(true) && getUserData()
-      navigate("/");
+      if(data.success){
+        setIsAdmin(data.user?.role === "admin");
+        setIsLoggedIn(true)
+        getUserData()
+        toast.success(data.message)
+        navigate('/')
+      } else {
+        toast.error(data.message)
+      }
 
       console.log(data);
     } catch (error) {

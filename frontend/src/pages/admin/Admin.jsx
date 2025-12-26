@@ -16,95 +16,119 @@ import {
 import MovieIcon from "@mui/icons-material/Movie";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const drawerWidth = 240;
 
 const Admin = () => {
+  const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
   const navigate = useNavigate();
 
+  const logoutUser = async () => {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:4000/api/v1/user/logout"
+      );
+      if (data.success) {
+        toast.success(data.success);
+        setIsLoggedIn(false);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    !isAdmin && (
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
 
-      {/* Top Bar */}
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: 1201, backgroundColor: "#121212" }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Admin Panel
-          </Typography>
-        </Toolbar>
-      </AppBar>
+        {/* Top Bar */}
+        <AppBar
+          position="fixed"
+          sx={{ zIndex: 1201, backgroundColor: "#121212" }}
+        >
+          <Toolbar>
+            <Typography variant="h6" noWrap>
+              Admin Panel
+            </Typography>
+          </Toolbar>
+        </AppBar>
 
-      {/* Sidebar */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          [`& .MuiDrawer-paper`]: {
+        {/* Sidebar */}
+        <Drawer
+          variant="permanent"
+          sx={{
             width: drawerWidth,
-            boxSizing: "border-box",
-            backgroundColor: "#1e1e1e",
-            color: "#fff",
-          },
-        }}
-      >
-        <Toolbar />
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate("/admin/dashboard")}>
-              <ListItemIcon sx={{ color: "#fff" }}>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-          </ListItem> 
+            [`& .MuiDrawer-paper`]: {
+              width: drawerWidth,
+              boxSizing: "border-box",
+              backgroundColor: "#1e1e1e",
+              color: "#fff",
+            },
+          }}
+        >
+          <Toolbar />
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/admin/dashboard")}>
+                <ListItemIcon sx={{ color: "#fff" }}>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </ListItem>
 
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate("/admin/add-movie")}>
-              <ListItemIcon sx={{ color: "#fff" }}>
-                <MovieIcon />
-              </ListItemIcon>
-              <ListItemText primary="Add Movie" />
-            </ListItemButton>
-          </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/admin/add-movie")}>
+                <ListItemIcon sx={{ color: "#fff" }}>
+                  <MovieIcon />
+                </ListItemIcon>
+                <ListItemText primary="Add Movie" />
+              </ListItemButton>
+            </ListItem>
 
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate("/admin/movies")}>
-              <ListItemIcon sx={{ color: "#fff" }}>
-                <MovieIcon />
-              </ListItemIcon>
-              <ListItemText primary="Movies" />
-            </ListItemButton>
-          </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/admin/movies")}>
+                <ListItemIcon sx={{ color: "#fff" }}>
+                  <MovieIcon />
+                </ListItemIcon>
+                <ListItemText primary="Movies" />
+              </ListItemButton>
+            </ListItem>
 
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon sx={{ color: "#fff" }}>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Drawer>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon sx={{ color: "#fff" }}>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Drawer>
 
-      {/* Page Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          bgcolor: "#f5f5f5",
-          p: 3,
-          // ml: `${drawerWidth}px`,
-        }}
-      >
-        <Toolbar />
-        <Outlet />
+        {/* Page Content */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: "#f5f5f5",
+            p: 3,
+            // ml: `${drawerWidth}px`,
+          }}
+        >
+          <Toolbar />
+          <Outlet />
+        </Box>
       </Box>
-    </Box>
+    )
   );
 };
 

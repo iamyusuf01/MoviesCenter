@@ -9,30 +9,32 @@ import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
-import { Link, NavLink, useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const {isLoggedIn, setIsLoggedIn } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
   const navigate = useNavigate();
 
-  const logoutUser = async() => {
+  const logoutUser = async () => {
     try {
-      const {data} = await axios.post('http://localhost:4000/api/v1/user/logout')
-      if(data.success){
-        toast.success(data.success)
-        setIsLoggedIn(false)
-        navigate('/')
-      } else{
-        toast.error(data.message)
+      const { data } = await axios.post(
+        "http://localhost:4000/api/v1/user/logout"
+      );
+      if (data.success) {
+        toast.success(data.success);
+        setIsLoggedIn(false);
+        navigate("/");
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
   return (
     <AppBar
       position="static"
@@ -72,6 +74,7 @@ const Navbar = () => {
             overflow: "hidden",
           }}
         >
+        
           {/* Dropdown */}
           <Select
             defaultValue="all"
@@ -106,23 +109,33 @@ const Navbar = () => {
         {/* Right Side */}
         <Button sx={{ color: "#fff", textTransform: "none" }}>IMDbPro</Button>
 
-        <Button
-          startIcon={<TurnedInNotIcon />}
-          sx={{ color: "#fff", textTransform: "none" }}
-        >
-          Watchlist
-        </Button>
+        {!isAdmin ? (
+          <Button
+            startIcon={<TurnedInNotIcon />}
+            sx={{ color: "#fff", textTransform: "none" }}
+          >
+            Watchlist
+          </Button>
+        ) : (
+          <Button
+            onClick={() => navigate('/admin')}
+            // startIcon={<TurnedInNotIcon />}
+            sx={{ color: "#fff", textTransform: "none" }}
+          >
+            Admin Panel
+          </Button>
+        )}
 
-        { isLoggedIn ? (
+        {isLoggedIn ? (
           <Button
             onClick={logoutUser}
             sx={{ color: "#fff", textTransform: "none" }}
           >
-             Logout
+            Logout
           </Button>
         ) : (
           <Button
-            onClick={() => navigate('/sign-in')}
+            onClick={() => navigate("/sign-in")}
             sx={{ color: "#fff", textTransform: "none" }}
           >
             SignIn
