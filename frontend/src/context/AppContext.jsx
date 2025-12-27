@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 export const AppContext = createContext();
 
@@ -15,6 +15,10 @@ export const AppContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [movies, setMovies] = useState([]);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
+
   const navigate = useNavigate();
 
   const [allMovies, setAllMovies] = useState([]);
@@ -50,7 +54,7 @@ export const AppContextProvider = (props) => {
       // console.log(data?.role);
     } catch (error) {
       toast.error(error.message);
-    } 
+    }
   };
 
   const fetchAllMovies = async () => {
@@ -67,6 +71,25 @@ export const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+  const fetchSearchMovies = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/v1/movie/search",
+        { params: { q: query } }
+      );
+
+      if (data.success) {
+        setMovies(data.movies);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+     if (!query) return;
+    fetchSearchMovies()
+  }, [query])
 
   const calculateRating = (movie) => {
     if (movie.rating?.length === 0) {
@@ -97,12 +120,14 @@ export const AppContextProvider = (props) => {
     isLoggedIn,
     setIsLoggedIn,
     calculateRating,
-    isAdmin, loading,
+    isAdmin,
+    loading,
     setIsAdmin,
     setAllMovies,
     token,
     navigate,
     allMovies,
+    fetchSearchMovies, query, movies, setMovies
   };
 
   return (
