@@ -9,8 +9,7 @@ import { AppContext } from "../../context/AppContext";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { fetchSearchMovies, movies, setMovies } =
-    useContext(AppContext);
+  const { fetchSearchMovies,sortedBySearch,  movies } = useContext(AppContext);
   const queryParam = searchParams.get("q") || "";
   const [input, setInput] = useState(queryParam);
   const navigate = useNavigate();
@@ -24,14 +23,17 @@ const Search = () => {
       (movie) =>
         movie.title.toLowerCase().includes(input) ||
         movie.description.toLowerCase().includes(input)
+        
     );
-    fetchSearchMovies(searchFilterd)
+
+    fetchSearchMovies(searchFilterd);
+    // sortedBySearch(searchFilterd)
     navigate(`/search?q=${input.trim()}`);
   };
 
   useEffect(() => {
-    handleSearch()
-  }, [queryParam]);
+    handleSearch();
+  }, []);
 
   return (
     <>
@@ -55,7 +57,9 @@ const Search = () => {
             ".MuiSelect-select": { padding: "6px 12px" },
           }}
         >
-          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="all" onClick={() => navigate("/all")}>
+            All
+          </MenuItem>
           <MenuItem value="movies">Movies</MenuItem>
           <MenuItem value="tv">TV Shows</MenuItem>
         </Select>

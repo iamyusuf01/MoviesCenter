@@ -57,20 +57,6 @@ export const AppContextProvider = (props) => {
     }
   };
 
-  const fetchAllMovies = async () => {
-    try {
-      const { data } = await axios.get(
-        "http://localhost:4000/api/movie/all-movies"
-      );
-      if (data.success) {
-        setAllMovies(data.movies);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
   const fetchSearchMovies = async () => {
     try {
       const { data } = await axios.get(
@@ -81,15 +67,32 @@ export const AppContextProvider = (props) => {
       if (data.success) {
         setMovies(data.movies);
       }
+      console.log(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const sortedBySearch = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/v1/movie/sorted",
+        { params: { q: query } }
+      );
+
+      if (data.success) {
+        setMovies(data.movies);
+      }
+      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   useEffect(() => {
-     if (!query) return;
-    fetchSearchMovies()
-  }, [query])
+    if (!query) return;
+    fetchSearchMovies();
+    sortedBySearch();
+  }, [query]);
 
   const calculateRating = (movie) => {
     if (movie.rating?.length === 0) {
@@ -104,8 +107,8 @@ export const AppContextProvider = (props) => {
 
   useEffect(() => {
     getAuthState();
-    fetchAllMovies;
     getUserData();
+    
   });
 
   useEffect(() => {
@@ -114,7 +117,6 @@ export const AppContextProvider = (props) => {
 
   const value = {
     getAuthState,
-    // authState,
     userData,
     getUserData,
     isLoggedIn,
@@ -124,10 +126,14 @@ export const AppContextProvider = (props) => {
     loading,
     setIsAdmin,
     setAllMovies,
+    allMovies,
     token,
     navigate,
-    allMovies,
-    fetchSearchMovies, query, movies, setMovies
+    fetchSearchMovies,
+    sortedBySearch,
+    query,
+    movies,
+    setMovies,
   };
 
   return (

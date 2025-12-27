@@ -13,7 +13,6 @@ import Search from "./Search";
 
 const Navbar = () => {
   const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
-  const {q} = useParams()
   const navigate = useNavigate();
 
   const logoutUser = async () => {

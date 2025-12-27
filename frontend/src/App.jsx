@@ -10,6 +10,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Movies from "./pages/admin/Movies";
 import Search from "./components/student/Search";
 import MovieList from "./pages/students/MoviesList";
+import AllMovies from "./components/student/AllMovies";
 
 function App() {
   const isAdminRoute = useMatch("/admin/*");
@@ -22,6 +23,7 @@ function App() {
         <Route path="/registration" element={<CreateAccount />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/search" element={<MovieList />} />
+        <Route path="/all" element={<AllMovies />} />
         
 
         {/* Admin routes */}
