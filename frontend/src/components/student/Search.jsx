@@ -3,51 +3,52 @@ import SearchIcon from "@mui/icons-material/Search";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Search = () => {
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get("q") || "";
   const [input, setInput] = useState(queryParam);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if(!queryParam.trim()){
-      setMovies([])
+  // 🔎 Update URL on search
+  const handleSearch = () => {
+    if (!input.trim()) {
+      setSearchParams({});
+      setMovies([]);
       return;
     }
+
+    navigate("/search");
+    setSearchParams({ q: input.trim() });
+  };
+
+  useEffect(() => {
+    if (!queryParam) return;
+
     const searchMovies = async () => {
       try {
         const { data } = await axios.get(
           "http://localhost:4000/api/v1/movie/search",
-          {
-            params: { q: queryParam }, // 🔥 send search text
-            withCredentials: true,
-          }
+          { params: { q: queryParam } }
         );
 
         if (data.success) {
-          setMovies(data.movies); // ✅ movies go here
+          setMovies(data.movies);
         }
+        console.log(data);
       } catch (error) {
         toast.error(error.message);
       }
     };
 
     searchMovies();
-  }, [queryParam]); // ✅ only input triggers search
+  }, [queryParam]);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setInput(value);
-
-    if (value) {
-      setSearchParams({ q: value }); // 👉 shows in URL
-    } else {
-      setSearchParams({}); // clear param
-    }
-  };
+  useEffect(() => {
+    setInput(queryParam);
+  }, [queryParam]);
 
   return (
     <Box
@@ -61,15 +62,13 @@ const Search = () => {
         overflow: "hidden",
       }}
     >
-      {/* Dropdown */}
+      {/* Category */}
       <Select
         defaultValue="all"
         sx={{
           height: "100%",
           borderRight: "1px solid #ddd",
-          ".MuiSelect-select": {
-            padding: "6px 12px",
-          },
+          ".MuiSelect-select": { padding: "6px 12px" },
         }}
       >
         <MenuItem value="all">All</MenuItem>
@@ -77,23 +76,21 @@ const Search = () => {
         <MenuItem value="tv">TV Shows</MenuItem>
       </Select>
 
-      {/* Input */}
+      {/* Search input */}
       <InputBase
-        onClick={() => navigate('/search')}
         placeholder="Search IMDb"
         value={input}
-        onChange={handleChange}
-        sx={{
-          paddingX: 2,
-          flexGrow: 1,
-        }}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        sx={{ paddingX: 2, flexGrow: 1 }}
       />
 
-      {/* Search Icon */}
-      <IconButton>
+      {/* Search button */}
+      <IconButton onClick={handleSearch}>
         <SearchIcon />
       </IconButton>
     </Box>
+    
   );
 };
 
