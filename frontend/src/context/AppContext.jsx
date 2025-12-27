@@ -31,6 +31,7 @@ export const AppContextProvider = (props) => {
         { withCredentials: true }
       );
       if (data.success) {
+        toast.success('Is Auth')
         setIsLoggedIn(true);
         // getUserData();
       }
@@ -45,11 +46,13 @@ export const AppContextProvider = (props) => {
         "http://localhost:4000/api/v1/user/current-user",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (data.success && data.user?.role === "admin") {
+      // ?problem is here
+      if (data.success ) {
         setUserData(data.user);
+        // toast.success('hi hello')
         setIsAdmin(true);
       } else {
-        toast.error(data.message);
+        toast.error('error');
       }
       // console.log(data?.role);
     } catch (error) {
@@ -82,7 +85,7 @@ export const AppContextProvider = (props) => {
       if (data.success) {
         setMovies(data.movies);
       }
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -106,8 +109,8 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
-    getAuthState();
-    getUserData();
+    getAuthState
+    getUserData
     
   });
 
