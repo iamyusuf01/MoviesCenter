@@ -14,7 +14,7 @@ import StarIcon from "@mui/icons-material/Star";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { grey, yellow } from "@mui/material/colors";
+import { grey} from "@mui/material/colors";
 
 const AllMovies = () => {
   const [allMovies, setAllMovies] = useState([]);
@@ -67,7 +67,7 @@ const AllMovies = () => {
               </Box>
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <StarIcon fontSize="small" c />
+                  <StarIcon fontSize="small"  />
                   <Typography
                     variant="body2"
                     color="grey"

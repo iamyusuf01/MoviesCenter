@@ -33,7 +33,7 @@ export const AppContextProvider = (props) => {
       if (data.success) {
         toast.success('Is Auth')
         setIsLoggedIn(true);
-        // getUserData();
+        // getUserData(true);
       }
     } catch (error) {
       toast.error(error.message);
@@ -48,9 +48,10 @@ export const AppContextProvider = (props) => {
       );
       // ?problem is here
       if (data.success ) {
-        setUserData(data.user);
-        // toast.success('hi hello')
-        setIsAdmin(true);
+        setUserData(data.userData);
+        setIsLoggedIn(true)
+        data.userData?.role === 'admin' && setIsAdmin(true);
+        // console.log(data.userData.role)
       } else {
         toast.error('error');
       }
@@ -115,7 +116,7 @@ export const AppContextProvider = (props) => {
   });
 
   useEffect(() => {
-    if (token) getUserData();
+    if (!token) getUserData();
   }, [token]);
 
   const value = {

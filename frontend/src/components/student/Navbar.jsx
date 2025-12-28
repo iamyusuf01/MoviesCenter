@@ -4,7 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
-import {  useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import axios from "axios";
@@ -21,7 +21,7 @@ const Navbar = () => {
         "http://localhost:4000/api/v1/user/logout"
       );
       if (data.success) {
-        toast.success(data.success);
+        toast.success(data.message);
         setIsLoggedIn(false);
         navigate("/");
       } else {
@@ -59,41 +59,41 @@ const Navbar = () => {
         >
           Menu
         </Button>
-        <Search/>
+        <Search />
 
         {/* Right Side */}
         <Button sx={{ color: "#fff", textTransform: "none" }}>IMDbPro</Button>
 
-        {!isAdmin ? (
+        {isAdmin ? (
+          <Button
+            onClick={() => navigate("/admin")}
+            // startIcon={<TurnedInNotIcon />}
+            sx={{ color: "#fff", textTransform: "none" }}
+          >
+            Admin Panel
+          </Button>
+        ) : (
           <Button
             startIcon={<TurnedInNotIcon />}
             sx={{ color: "#fff", textTransform: "none" }}
           >
             Watchlist
           </Button>
-        ) : (
-          <Button
-            onClick={() => navigate('/admin')}
-            // startIcon={<TurnedInNotIcon />}
-            sx={{ color: "#fff", textTransform: "none" }}
-          >
-            Admin Panel
-          </Button>
         )}
 
-        {isLoggedIn ? (
-          <Button
-            onClick={logoutUser}
-            sx={{ color: "#fff", textTransform: "none" }}
-          >
-            Logout
-          </Button>
-        ) : (
+        {!isLoggedIn ? (
           <Button
             onClick={() => navigate("/sign-in")}
             sx={{ color: "#fff", textTransform: "none" }}
           >
             SignIn
+          </Button>
+        ) : (
+          <Button
+            onClick={logoutUser}
+            sx={{ color: "#fff", textTransform: "none" }}
+          >
+            Logout
           </Button>
         )}
 

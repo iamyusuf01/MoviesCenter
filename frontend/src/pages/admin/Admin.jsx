@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 const drawerWidth = 240;
 
 const Admin = () => {
-  const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
+  const { setIsLoggedIn, isAdmin } = useContext(AppContext);
   const navigate = useNavigate();
 
   const logoutUser = async () => {
@@ -35,7 +35,7 @@ const Admin = () => {
       if (data.success) {
         toast.success(data.success);
         setIsLoggedIn(false);
-        navigate("/");
+        navigate("/sign-in");
       } else {
         toast.error(data.message);
       }
@@ -45,7 +45,7 @@ const Admin = () => {
   };
 
   return (
-    !isAdmin && (
+    isAdmin && (
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
 
@@ -54,7 +54,10 @@ const Admin = () => {
           position="fixed"
           sx={{ zIndex: 1201, backgroundColor: "#121212" }}
         >
-          <Toolbar>
+          <Toolbar sx={{ direction: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h6" noWrap>
+              <Link to={"/"}>Home</Link>
+            </Typography>
             <Typography variant="h6" noWrap>
               Admin Panel
             </Typography>
@@ -104,7 +107,7 @@ const Admin = () => {
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={logoutUser}>
                 <ListItemIcon sx={{ color: "#fff" }}>
                   <LogoutIcon />
                 </ListItemIcon>

@@ -14,7 +14,6 @@ const Search = () => {
   const [input, setInput] = useState(queryParam);
   const navigate = useNavigate();
 
-  // 🔎 Update URL on search
   const handleSearch = () => {
     if (!input.trim()) {
       return;

@@ -2,7 +2,7 @@ import express from 'express'
 import verifyJwt, { authorizeRoles } from '../middlewares/authMiddleware.js'
 import { addMovies, deleteMovie, getAllMovies, updateMovie, updatePoster } from '../controllers/movieController.js'
 import {upload} from '../middlewares/multer.js'
-import { updateUserRole } from '../controllers/userController.js'
+import {updateUserRole } from '../controllers/userController.js'
 
 const router = express.Router()
 
