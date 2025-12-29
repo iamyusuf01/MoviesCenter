@@ -7,6 +7,7 @@ export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_API_URL;
+  console.log(backendUrl)
 
   axios.defaults.withCredentials = true;
   const token = localStorage.getItem("accessToken");
