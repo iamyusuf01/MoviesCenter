@@ -41,7 +41,7 @@ export const AppContextProvider = (props) => {
     try {
       const { data } = await axios.get(
         backendUrl + "/api/v1/user/current-user",
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
       // ?problem is here
       if (data?.success) {
@@ -50,7 +50,6 @@ export const AppContextProvider = (props) => {
         data?.userData?.role === "admin" && setIsAdmin(true);
       } else {
         toast.error("error");
-        
       }
     } catch (error) {
       toast.error(error.message);
@@ -105,7 +104,7 @@ export const AppContextProvider = (props) => {
   useEffect(() => {
     getAuthState;
     getUserData;
-  }, );
+  });
 
   useEffect(() => {
     if (!token) {
