@@ -1,7 +1,6 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { modelNames } from "mongoose";
 
 //User Registration
 export const registerUser = async (req, res) => {
@@ -111,13 +110,14 @@ export const refreshAccessToken = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      sameSite: "none", 
     };
 
     const { accessToken, newRefreshToken } =
       await generateAccessTokenAndRefreshTokens(user._id);
     return res
       .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", newRefreshTokenToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
       .json({
         success: true,
         message: "Access token refreshed",
