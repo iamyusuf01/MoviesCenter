@@ -20,7 +20,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: 'https://movies-center-frontend.vercel.app',
     credentials: true,
   })
 );
