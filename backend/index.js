@@ -33,7 +33,6 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/movie", movieRouter);
 
-
 app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`);
 });
