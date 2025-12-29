@@ -29,7 +29,6 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin" element={<Admin />}>
           <Route index element={<Dashboard />} />
-          {/* <Route path="dashboard" element={<Dashboard />} /> */}
           <Route path="movies" element={<Movies />} />
           <Route path="movies/edit/:id" element={<UpdateMovies />} />
           <Route path="add-movie" element={<AddMovies />} />
