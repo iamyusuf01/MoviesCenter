@@ -33,7 +33,7 @@ const Admin = () => {
         backendUrl + "/api/v1/user/logout"
       );
       if (data.success) {
-        toast.success(data.success);
+        toast.success('Admin logout successfully');
         setIsLoggedIn(false);
         navigate("/sign-in");
       } else {

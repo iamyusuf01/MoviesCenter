@@ -14,7 +14,7 @@ const CreateAccount = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setInLoggedIn, backendUrl } = useContext(AppContext);
+  const {  backendUrl } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleClick = async (e) => {

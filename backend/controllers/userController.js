@@ -17,7 +17,7 @@ export const registerUser = async (req, res) => {
     }
     //check User Exists aur Not
 
-    const alreadyUser = await User.findOne({email});
+    const alreadyUser = await User.findOne({ email });
     if (alreadyUser) {
       return res.json({
         success: false,
@@ -53,7 +53,6 @@ export const registerUser = async (req, res) => {
       message: "User register successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.json({
       success: false,
       message: error.message,
@@ -75,9 +74,7 @@ const generateAccessTokenAndRefreshTokens = async (userId) => {
     await user.save({ ValidityBeforeSave: false });
 
     return { accessToken, refreshToken };
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const refreshAccessToken = async (req, res) => {
@@ -128,7 +125,6 @@ export const refreshAccessToken = async (req, res) => {
         refreshToken: newRefreshToken,
       });
   } catch (error) {
-    console.log(error);
     return res.json({
       success: false,
       message: error.message,
@@ -140,7 +136,7 @@ export const refreshAccessToken = async (req, res) => {
 export const login = async (req, res) => {
   //fetching user from req body
   try {
-    const { email,  password } = req.body;
+    const { email, password } = req.body;
     //check validation
     if (!email || !password) {
       return res.json({
@@ -190,7 +186,6 @@ export const login = async (req, res) => {
         refreshToken,
       });
   } catch (error) {
-    console.log(error);
     return res.json({
       success: false,
       message: error.message,
@@ -223,7 +218,6 @@ export const logout = async (req, res) => {
         message: "User logout successfully",
       });
   } catch (error) {
-    console.log(error);
     return res.json({
       success: false,
       message: error.message,
@@ -262,7 +256,6 @@ export const resetPassword = async (req, res) => {
       message: "Reset password succcessfully",
     });
   } catch (error) {
-    console.log(error);
     return res.json({
       success: false,
       message: error.message,
@@ -273,18 +266,17 @@ export const resetPassword = async (req, res) => {
 //Authenticate
 export const isAuthenticate = async (req, res) => {
   try {
-    if(!req.user){
+    if (!req.user) {
       return res.json({
         success: false,
-        message: 'User not found'
-      })
+        message: "User not found",
+      });
     }
     return res.json({
       success: true,
       message: "User is authenticated",
     });
   } catch (error) {
-    console.log(error);
     return res.json({
       success: false,
       message: error.message,
@@ -333,22 +325,14 @@ export const updateUserRole = async (req, res) => {
 export const getUserData = async (req, res) => {
   try {
     // const { userId } = req.body;
-
     const user = await User.findById(req.user);
-
-    if (!user) {
-      return res.json({
-        success: false,
-        message: "User not found",
-      });
-    }
     res.json({
       success: true,
       userData: {
         name: user.name,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (error) {
     return res.json({
@@ -357,4 +341,3 @@ export const getUserData = async (req, res) => {
     });
   }
 };
-

@@ -22,7 +22,7 @@ const Navbar = () => {
       if (data.success) {
         toast.success(data.message);
         setIsLoggedIn(false);
-        navigate("/");
+        navigate("/sign-in");
       } else {
         toast.error(data.message);
       }

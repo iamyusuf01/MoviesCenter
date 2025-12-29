@@ -14,7 +14,6 @@ export const AppContextProvider = (props) => {
   // const [authState, setAuthState] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
@@ -30,7 +29,6 @@ export const AppContextProvider = (props) => {
         withCredentials: true,
       });
       if (data.success) {
-        toast.success("Is Auth");
         setIsLoggedIn(true);
         getUserData();
       }
@@ -46,12 +44,13 @@ export const AppContextProvider = (props) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       // ?problem is here
-      if (data.success) {
+      if (data?.success) {
         setUserData(data.userData);
         setIsLoggedIn(true);
-        data.userData?.role === "admin" && setIsAdmin(true);
+        data?.userData?.role === "admin" && setIsAdmin(true);
       } else {
         toast.error("error");
+        
       }
     } catch (error) {
       toast.error(error.message);
@@ -106,10 +105,10 @@ export const AppContextProvider = (props) => {
   useEffect(() => {
     getAuthState;
     getUserData;
-  });
+  }, );
 
   useEffect(() => {
-    if (token) {
+    if (!token) {
       getUserData();
     }
   }, [token]);
@@ -123,7 +122,6 @@ export const AppContextProvider = (props) => {
     backendUrl,
     calculateRating,
     isAdmin,
-    loading,
     setIsAdmin,
     setAllMovies,
     allMovies,
