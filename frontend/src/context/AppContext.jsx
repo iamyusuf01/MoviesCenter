@@ -6,8 +6,8 @@ import { useNavigate, useSearchParams } from "react-router";
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  // console.log(backendUrl)
+  const backendUrl = import.meta.env.VITE_API_URL;
+
   axios.defaults.withCredentials = true;
   const token = localStorage.getItem("accessToken");
 
@@ -26,10 +26,9 @@ export const AppContextProvider = (props) => {
 
   const getAuthState = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:4000/api/v1/user/is-auth",
-        { withCredentials: true }
-      );
+      const { data } = await axios.get(backendUrl + "/api/v1/user/is-auth", {
+        withCredentials: true,
+      });
       if (data.success) {
         toast.success("Is Auth");
         setIsLoggedIn(true);
@@ -43,7 +42,7 @@ export const AppContextProvider = (props) => {
   const getUserData = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/v1/user/current-user",
+        backendUrl + "/api/v1/user/current-user",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       // ?problem is here
@@ -51,11 +50,9 @@ export const AppContextProvider = (props) => {
         setUserData(data.userData);
         setIsLoggedIn(true);
         data.userData?.role === "admin" && setIsAdmin(true);
-        // console.log(data.userData.role)
       } else {
         toast.error("error");
       }
-      // console.log(data?.role);
     } catch (error) {
       toast.error(error.message);
     }
@@ -63,30 +60,27 @@ export const AppContextProvider = (props) => {
 
   const fetchSearchMovies = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:4000/api/v1/movie/search",
-        { params: { q: query } }
-      );
+      const { data } = await axios.get(backendUrl + "/api/v1/movie/search", {
+        params: { q: query },
+      });
 
       if (data.success) {
         setMovies(data.movies);
       }
-      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
+
   const sortedBySearch = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:4000/api/v1/movie/sorted",
-        { params: { q: query } }
-      );
+      const { data } = await axios.get(backendUrl + "/api/v1/movie/sorted", {
+        params: { q: query },
+      });
 
       if (data.success) {
         setMovies(data.movies);
       }
-      // console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -126,6 +120,7 @@ export const AppContextProvider = (props) => {
     getUserData,
     isLoggedIn,
     setIsLoggedIn,
+    backendUrl,
     calculateRating,
     isAdmin,
     loading,

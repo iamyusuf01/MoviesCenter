@@ -13,7 +13,7 @@ import Input from "@mui/material/Input";
 import { useNavigate } from "react-router";
 
 const AddMovies = () => {
-  const { token } = useContext(AppContext);
+  const { token, backendUrl } = useContext(AppContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
@@ -42,7 +42,7 @@ const AddMovies = () => {
       formData.append("releaseYear", releaseYear);
 
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/admin/add-movies",
+        backendUrl + "/api/v1/admin/add-movies",
         formData,
         {
           withCredentials: true,

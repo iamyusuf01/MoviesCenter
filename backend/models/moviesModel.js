@@ -5,43 +5,38 @@ const movieSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     releaseYear: {
       type: Number,
+      min: 1888,
       required: true,
     },
     duration: {
-      type: String,
+      type: Number,
       required: true,
     },
     rating: {
       type: Number,
-      default: 0,
+      default: 8.5,
       max: 10,
-      min: 0
+      min: 0,
     },
     ageRating: {
-      type: String,
-      required: true
-    },
-    ratingCount: {
       type: Number,
-      default: 0
+      required: true,
     },
     poster: {
       type: String, // Cloudinary URL
       required: true,
     },
-     description: {
+    description: {
       type: String,
-      required: true
+      required: true,
     },
   },
   { timestamps: true }
 );
-
-
 
 const Movie = mongoose.models.Movie || mongoose.model("Movie", movieSchema);
 

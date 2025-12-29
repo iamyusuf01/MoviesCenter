@@ -204,17 +204,10 @@ export const getSortedMovies = async (req, res) => {
       [sortFields[sortBy]]: sortOrder,
     });
 
-    if (!movies.length) {
-      return res.status(404).json({
-        success: false,
-        message: "No movies found",
-      });
-    }
-
     return res.status(200).json({
       success: true,
       message: "Movies sorted successfully",
-      movies,
+      movies: movies
     });
   } catch (error) {
     return res.status(500).json({

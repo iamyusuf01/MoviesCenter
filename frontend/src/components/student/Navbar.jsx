@@ -12,14 +12,13 @@ import toast from "react-hot-toast";
 import Search from "./Search";
 
 const Navbar = () => {
-  const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn, isAdmin, backendUrl } =
+    useContext(AppContext);
   const navigate = useNavigate();
 
   const logoutUser = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/v1/user/logout"
-      );
+      const { data } = await axios.post(backendUrl + "/api/v1/user/logout");
       if (data.success) {
         toast.success(data.message);
         setIsLoggedIn(false);

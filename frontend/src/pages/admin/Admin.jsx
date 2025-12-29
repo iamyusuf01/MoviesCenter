@@ -24,13 +24,13 @@ import toast from "react-hot-toast";
 const drawerWidth = 240;
 
 const Admin = () => {
-  const { setIsLoggedIn, isAdmin } = useContext(AppContext);
+  const { setIsLoggedIn, isAdmin, backendUrl } = useContext(AppContext);
   const navigate = useNavigate();
 
   const logoutUser = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/user/logout"
+        backendUrl + "/api/v1/user/logout"
       );
       if (data.success) {
         toast.success(data.success);

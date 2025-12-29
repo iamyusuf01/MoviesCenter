@@ -9,7 +9,7 @@ import { AppContext } from "../../context/AppContext";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { fetchSearchMovies,sortedBySearch,  movies } = useContext(AppContext);
+  const { fetchSearchMovies, sortedBySearch,  movies } = useContext(AppContext);
   const queryParam = searchParams.get("q") || "";
   const [input, setInput] = useState(queryParam);
   const navigate = useNavigate();

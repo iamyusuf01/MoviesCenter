@@ -14,14 +14,14 @@ const CreateAccount = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setInLoggedIn } = useContext(AppContext);
+  const { setInLoggedIn, backendUrl } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/user/register",
+        backendUrl + "/api/v1/user/register",
         { name, email, password },
         { withCredentials: true }
       );

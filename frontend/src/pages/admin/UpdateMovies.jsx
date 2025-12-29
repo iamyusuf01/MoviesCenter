@@ -13,7 +13,7 @@ import Input from "@mui/material/Input";
 import { TableRow } from "@mui/material";
 import { useParams } from "react-router";
 const UpdateMovies = () => {
-  const { token, navigate } = useContext(AppContext);
+  const { token, navigate, backendUrl } = useContext(AppContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
@@ -24,7 +24,7 @@ const UpdateMovies = () => {
       e.preventDefault();
       
       const { data } = await axios.put(
-        `http://localhost:4000/api/v1/admin/movie/${id}`, {title, description, duration},
+        backendUrl + `/api/v1/admin/movie/${id}`, {title, description, duration},
         {
           withCredentials: true,
           headers: {

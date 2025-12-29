@@ -22,14 +22,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const Movies = () => {
-  const { isAdmin, token } = useContext(AppContext);
+  const { isAdmin, token, backendUrl } = useContext(AppContext);
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   const fetchAdminMovies = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/v1/admin/get-movies",
+        backendUrl + "/api/v1/admin/get-movies",
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -43,7 +43,7 @@ const Movies = () => {
     if(!id) return;
     try {
       const { data } = await axios.delete(
-        `http://localhost:4000/api/v1/admin/movie/${id}`,
+        backendUrl + `/api/v1/admin/movie/${id}`,
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
       if (data.success) {

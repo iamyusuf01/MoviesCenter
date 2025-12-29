@@ -18,7 +18,7 @@ const SignIn = () => {
   const loginUser = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("http://localhost:4000/api/v1/user/login",  {
+      const { data } = await axios.post(backendUrl + "/api/v1/user/login",  {
         email,
         password,
       }, {withCrendential: true});
