@@ -11,7 +11,7 @@ import {
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import StarIcon from "@mui/icons-material/Star";
-import { grey, yellow } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 
 const MovieList = () => {
   const { query, movies } = useContext(AppContext);

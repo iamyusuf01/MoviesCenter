@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  ImageListItem,
   Paper,
   Table,
   TableBody,
@@ -24,9 +23,9 @@ import toast from "react-hot-toast";
 
 const Movies = () => {
   const { isAdmin, token } = useContext(AppContext);
-  const [movie, setMovie] = useState([]);
-
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
+
   const fetchAdminMovies = async () => {
     try {
       const { data } = await axios.get(
@@ -34,18 +33,38 @@ const Movies = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      data.success && setMovie(data.movies);
-      console.log(data);
+      data.success && setMovies(data.movies);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
+  const handleClickDelete = async (id) => {
+    if(!id) return;
+    try {
+      const { data } = await axios.delete(
+        `http://localhost:4000/api/v1/admin/movie/${id}`,
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        setMovies((prev) => prev.filter((m) => m._id !== id));
+         fetchAdminMovies();
+      } else {
+        toast.error(data.message);
+         fetchAdminMovies();
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+
   useEffect(() => {
-    if (!isAdmin) {
+    if (isAdmin && token) {
       fetchAdminMovies();
     }
-  }, [isAdmin]);
+  }, [isAdmin, token]);
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" mb={3}>
@@ -75,15 +94,15 @@ const Movies = () => {
           </TableHead>
 
           <TableBody>
-            {movie?.length ? (
-              movie.map((item) => (
+            {movies?.length ? (
+              movies.map((item) => (
                 <TableRow key={item._id}>
                   <TableCell>
                     <Avatar
                       variant="rounded"
                       src={item.poster}
                       alt={item.title}
-                      sx={{ width: 56, height: 80, }}
+                      sx={{ width: 56, height: 80 }}
                     />
                   </TableCell>
 
@@ -93,10 +112,16 @@ const Movies = () => {
                   <TableCell align="center">{item.releaseYear}</TableCell>
 
                   <TableCell align="center">
-                    <IconButton color="primary">
+                    <IconButton
+                      color="primary"
+                      onClick={() => navigate(`edit/${item._id}`)}
+                    >
                       <EditIcon />
                     </IconButton>
-                    <IconButton color="error">
+                    <IconButton
+                      color="error"
+                      onClick={() => handleClickDelete(item._id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>

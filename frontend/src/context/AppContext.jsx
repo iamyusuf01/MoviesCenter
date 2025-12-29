@@ -31,9 +31,9 @@ export const AppContextProvider = (props) => {
         { withCredentials: true }
       );
       if (data.success) {
-        toast.success('Is Auth')
+        toast.success("Is Auth");
         setIsLoggedIn(true);
-        // getUserData(true);
+        getUserData();
       }
     } catch (error) {
       toast.error(error.message);
@@ -47,13 +47,13 @@ export const AppContextProvider = (props) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       // ?problem is here
-      if (data.success ) {
+      if (data.success) {
         setUserData(data.userData);
-        setIsLoggedIn(true)
-        data.userData?.role === 'admin' && setIsAdmin(true);
+        setIsLoggedIn(true);
+        data.userData?.role === "admin" && setIsAdmin(true);
         // console.log(data.userData.role)
       } else {
-        toast.error('error');
+        toast.error("error");
       }
       // console.log(data?.role);
     } catch (error) {
@@ -110,13 +110,14 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
-    getAuthState
-    getUserData
-    
+    getAuthState;
+    getUserData;
   });
 
   useEffect(() => {
-    if (!token) getUserData();
+    if (token) {
+      getUserData();
+    }
   }, [token]);
 
   const value = {

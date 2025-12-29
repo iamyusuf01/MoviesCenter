@@ -8,9 +8,9 @@ import AddMovies from "./pages/admin/AddMovies";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./pages/admin/Dashboard";
 import Movies from "./pages/admin/Movies";
-import Search from "./components/student/Search";
 import MovieList from "./pages/students/MoviesList";
 import AllMovies from "./components/student/AllMovies";
+import UpdateMovies from "./pages/admin/UpdateMovies";
 
 function App() {
   const isAdminRoute = useMatch("/admin/*");
@@ -31,6 +31,7 @@ function App() {
           <Route index element={<Dashboard />} />
           {/* <Route path="dashboard" element={<Dashboard />} /> */}
           <Route path="movies" element={<Movies />} />
+          <Route path="movies/edit/:id" element={<UpdateMovies />} />
           <Route path="add-movie" element={<AddMovies />} />
         </Route>
       </Routes>

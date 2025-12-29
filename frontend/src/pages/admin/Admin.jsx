@@ -79,14 +79,14 @@ const Admin = () => {
         >
           <Toolbar />
           <List>
-            <ListItem disablePadding>
+            {/* <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/admin/dashboard")}>
                 <ListItemIcon sx={{ color: "#fff" }}>
                   <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
-            </ListItem>
+            </ListItem> */}
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/admin/add-movie")}>

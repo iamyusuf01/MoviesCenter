@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -10,40 +10,21 @@ import toast from "react-hot-toast";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { AppContext } from "../../context/AppContext";
 import Input from "@mui/material/Input";
-import { useNavigate } from "react-router";
-
-const AddMovies = () => {
-  const { token } = useContext(AppContext);
+import { TableRow } from "@mui/material";
+import { useParams } from "react-router";
+const UpdateMovies = () => {
+  const { token, navigate } = useContext(AppContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
-  const [ageRating, setAgeRating] = useState("");
-  const [releaseYear, setReleaseYear] = useState("");
-  const [poster, setPoster] = useState(null);
-  const [preview, setPreview] = useState(null);
-  
-  const navigate = useNavigate()
-  
-  const fileInputRef = useRef(null);
+  const {id} = useParams()
 
-  const addMovies = async (e) => {
+  const handleClick = async (e) => {
     try {
       e.preventDefault();
-      if (!poster) {
-        toast.error("Poster is not selected");
-        return;
-      }
-      const formData = new FormData();
-      formData.append("poster", poster);
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("duration", duration);
-      formData.append("ageRating", ageRating);
-      formData.append("releaseYear", releaseYear);
-
-      const { data } = await axios.post(
-        "http://localhost:4000/api/v1/admin/add-movies",
-        formData,
+      
+      const { data } = await axios.put(
+        `http://localhost:4000/api/v1/admin/movie/${id}`, {title, description, duration},
         {
           withCredentials: true,
           headers: {
@@ -53,16 +34,10 @@ const AddMovies = () => {
       );
       if (data?.success) {
         toast.success(data.message);
-        navigate("/admin/movies");
         setTitle("");
         setDescription("");
         setDuration("");
-        setAgeRating("");
-        setReleaseYear("");
-        setPoster(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
+        navigate('admin/movies')
       } else {
         toast.error(data.message);
       }
@@ -70,12 +45,6 @@ const AddMovies = () => {
       toast.error(error.message);
     }
   };
-  useEffect(() => {
-    if (!poster) return;
-    const url = URL.createObjectURL(poster);
-    setPreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [poster]);
   return (
     <Box
       sx={{
@@ -105,7 +74,7 @@ const AddMovies = () => {
           flexDirection: "row",
         }}
       >
-        <form onSubmit={addMovies}>
+        <form onSubmit={handleClick}>
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
             Title
           </Typography>
@@ -132,32 +101,6 @@ const AddMovies = () => {
           />
 
           <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Age Limit
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            type="text"
-            placeholder="Age Limit"
-            onChange={(e) => setAgeRating(e.target.value)}
-            value={ageRating}
-            sx={{ mb: 3 }}
-          />
-
-          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Release Date
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            placeholder="eg: 2025"
-            onChange={(e) => setReleaseYear(e.target.value)}
-            value={releaseYear}
-            sx={{ mb: 3 }}
-          />
-
-          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
             Description
           </Typography>
           <TextareaAutosize
@@ -178,31 +121,6 @@ const AddMovies = () => {
               outline: "none",
             }}
           />
-
-          <Typography sx={{ fontSize: 14, fontWeight: "bold", mb: 0.5 }}>
-            Add Poster
-          </Typography>
-          <Input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={(e) => setPoster(e.target.files?.[0])}
-            sx={{ mb: 3 }}
-          />
-          {poster && (
-            <Box>
-              <img
-                src={preview}
-                alt="poster-preview"
-                style={{
-                  width: "100%",
-                  maxHeight: 300,
-                  objectFit: "cover",
-                  borderRadius: 8,
-                }}
-              />
-            </Box>
-          )}
           <Button
             type="submit"
             fullWidth
@@ -226,4 +144,4 @@ const AddMovies = () => {
   );
 };
 
-export default AddMovies;
+export default UpdateMovies;

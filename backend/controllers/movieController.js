@@ -54,12 +54,13 @@ export const getAllMovies = async (req, res) => {
   try {
     const movies = await Movie.find();
 
-    if (movies.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No movies found",
-      });
-    }
+    // if (movies.length === 0) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "No movies found",
+    //     // movies: []
+    //   });
+    // }
 
     return res.status(200).json({
       success: true,
@@ -76,25 +77,30 @@ export const getAllMovies = async (req, res) => {
 
 export const updateMovie = async (req, res) => {
   try {
-    const { movieId, title, description, duration } = req.body;
+    const { title, description, duration } = req.body;
+    const { id } = req.params;
     if (!title || !description || !duration) {
       return res.json({
         success: false,
         message: "All fields are required",
       });
     }
-    if (!movieId) {
+    if (!id) {
       return res.status(401).json({
         success: false,
-        message: "Invalid movie Id",
+        message: "Invalid Id",
       });
     }
 
-    const movie = await Movie.findByIdAndUpdate(movieId, {
-      title,
-      description,
-      duration,
-    });
+    const movie = await Movie.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+        duration,
+      },
+      { new: true, runValidators: true }
+    );
 
     return res.json({
       success: true,
@@ -111,15 +117,15 @@ export const updateMovie = async (req, res) => {
 
 export const deleteMovie = async (req, res) => {
   try {
-    const { movieId } = req.body;
-    if (!movieId) {
+    const { id } = req.params;
+    if (!id) {
       return res.json({
         success: false,
         message: "Movie Id no found",
       });
     }
 
-    const movie = await Movie.findByIdAndDelete(movieId, {});
+    const movie = await Movie.findByIdAndDelete(id);
     if (!movie) {
       return res.json({
         success: false,
@@ -130,7 +136,6 @@ export const deleteMovie = async (req, res) => {
     return res.json({
       success: false,
       message: "delete movie successfully",
-      movie,
     });
   } catch (error) {
     return res.status(500).json({

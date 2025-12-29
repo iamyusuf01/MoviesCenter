@@ -28,7 +28,6 @@ const CreateAccount = () => {
       if (data.success) {
         toast.success("User Register Successfully");
         navigate("/sign-in");
-        console.log(data)
       } else {
         toast.error(data.message);
       }
