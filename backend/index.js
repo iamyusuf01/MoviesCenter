@@ -16,7 +16,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors(
+    cors({
+      origin: "https://movies-center-frontend.vercel.app",
+      credentials: true,
+    })
+  )
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
