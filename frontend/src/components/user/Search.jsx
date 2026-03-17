@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import MovieList from "../../pages/students/MoviesList";
+import MovieList from "../../pages/user/MoviesList";
 import { AppContext } from "../../context/AppContext";
 
 const Search = () => {
