@@ -1,6 +1,6 @@
 
 import { Box } from '@mui/material';
-import AllMovies from '../../components/student/AllMovies';
+import AllMovies from '../../components/user/AllMovies';
 
 const Home = () => {
   return (

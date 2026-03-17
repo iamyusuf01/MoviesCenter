@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -13,9 +13,11 @@ import StarIcon from "@mui/icons-material/Star";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { grey } from "@mui/material/colors";
+import { AppContext } from "../../context/AppContext";
 
 const AllMovies = () => {
-  const [allMovies, setAllMovies, backendUrl] = useState([]);
+  const [allMovies, setAllMovies, ] = useState([]);
+  const {backendUrl} = useContext(AppContext)
 
   const greyColor = grey[100];
 

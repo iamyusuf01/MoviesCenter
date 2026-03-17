@@ -1,15 +1,15 @@
 import { Route, Routes, useMatch } from "react-router";
-import Home from "./pages/students/Home";
-import Navbar from "./components/student/Navbar";
-import CreateAccount from "./components/student/CreateAccount";
-import SignIn from "./pages/students/SignIn";
+import Home from "./pages/user/Home";
+import Navbar from "./components/user/Navbar";
+import CreateAccount from "./components/user/CreateAccount";
+import SignIn from "./pages/user/SignIn";
 import Admin from "./pages/admin/Admin";
 import AddMovies from "./pages/admin/AddMovies";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./pages/admin/Dashboard";
 import Movies from "./pages/admin/Movies";
-import MovieList from "./pages/students/MoviesList";
-import AllMovies from "./components/student/AllMovies";
+import MovieList from "./pages/user/MoviesList";
+import AllMovies from "./components/user/AllMovies";
 import UpdateMovies from "./pages/admin/UpdateMovies";
 
 function App() {
