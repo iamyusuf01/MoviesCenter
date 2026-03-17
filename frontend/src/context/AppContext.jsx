@@ -41,7 +41,10 @@ export const AppContextProvider = (props) => {
     try {
       const { data } = await axios.get(
         backendUrl + "/api/v1/user/current-user",
-        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        },
       );
       // ?problem is here
       if (data?.success) {
@@ -107,7 +110,7 @@ export const AppContextProvider = (props) => {
   });
 
   useEffect(() => {
-    if (!token) {
+    if (token) {
       getUserData();
     }
   }, [token]);

@@ -16,7 +16,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
-app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+
+const allowedOrigins = [
+  process.env.CORS_ORIGIN,
+  "http://localhost:5173"
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 app.get("/", (req, res) => {
   res.send("Hello World");

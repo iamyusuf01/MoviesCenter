@@ -63,8 +63,11 @@ const AddMovies = () => {
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
+        console.log(data)
       } else {
         toast.error(data.message);
+        // console.log(data)
+
       }
     } catch (error) {
       toast.error(error.message);

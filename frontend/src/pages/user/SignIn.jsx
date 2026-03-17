@@ -10,29 +10,42 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const SignIn = () => {
-  const { backendUrl, isLoggedIn, setIsLoggedIn, getUserData, setIsAdmin  } = useContext(AppContext);
+  const { backendUrl, isLoggedIn, setIsLoggedIn, getUserData, setIsAdmin } =
+    useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const loginUser = async (e) => {
     e.preventDefault();
+
     try {
-      const { data } = await axios.post(backendUrl + "/api/v1/user/login",  {
-        email,
-        password,
-      }, {withCrendential: true});
-      if(data.success){
+      const { data } = await axios.post(
+        backendUrl + "/api/v1/user/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+
+      if (data.success) {
         setIsAdmin(data.user?.role === "admin");
-        setIsLoggedIn(true)
-        getUserData()
-        toast.success(data.message)
-        navigate('/')
+        setIsLoggedIn(true);
+
+        localStorage.setItem("accessToken", data.accessToken);
+        console.log(data);
+
+        getUserData();
+        toast.success(data.message);
+        navigate("/");
       } else {
-        toast.error(data.message)
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
