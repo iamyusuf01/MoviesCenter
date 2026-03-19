@@ -59,10 +59,10 @@ const AllMovies = () => {
                     {movie.releaseYear}
                   </Typography>
                   <Typography variant="body1" color="grey" letterSpacing={1}>
-                    {movie.duration}
+                    {movie.duration}M
                   </Typography>
                   <Typography variant="body1" color="grey" letterSpacing={1}>
-                    {movie.ageRating}
+                    {movie.ageRating}+
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>

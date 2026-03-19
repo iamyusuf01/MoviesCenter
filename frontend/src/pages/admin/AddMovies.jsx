@@ -21,10 +21,16 @@ const AddMovies = () => {
   const [releaseYear, setReleaseYear] = useState("");
   const [poster, setPoster] = useState(null);
   const [preview, setPreview] = useState(null);
-  
-  const navigate = useNavigate()
-  
+
+  const navigate = useNavigate();
+
   const fileInputRef = useRef(null);
+
+  const convertToMinutes = (time) => {
+    const match = time.match(/(\d+)h\s*(\d+)m/);
+    if (!match) return 0;
+    return parseInt(match[1]) * 60 + parseInt(match[2]);
+  };
 
   const addMovies = async (e) => {
     try {
@@ -37,9 +43,18 @@ const AddMovies = () => {
       formData.append("poster", poster);
       formData.append("title", title);
       formData.append("description", description);
-      formData.append("duration", duration);
-      formData.append("ageRating", ageRating);
-      formData.append("releaseYear", releaseYear);
+      formData.append("duration", convertToMinutes(duration));
+      
+      const parsedAge = Number(ageRating.replace("+", ""));
+
+      if (isNaN(parsedAge) || parsedAge <= 0) {
+        toast.error("Enter valid age rating (e.g. 13, 18)");
+        return;
+      }
+
+      formData.append("ageRating", parsedAge);
+
+      formData.append("releaseYear", Number(releaseYear));
 
       const { data } = await axios.post(
         backendUrl + "/api/v1/admin/add-movies",
@@ -49,7 +64,7 @@ const AddMovies = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       if (data?.success) {
         toast.success(data.message);
@@ -63,14 +78,14 @@ const AddMovies = () => {
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        console.log(data)
+        console.log(data);
       } else {
         toast.error(data.message);
         // console.log(data)
-
       }
     } catch (error) {
-      toast.error(error.message);
+      console.log("FULL ERROR:", error.response?.data); // 👈 ADD
+      toast.error(error.response?.data?.message || error.message);
     }
   };
   useEffect(() => {

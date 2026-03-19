@@ -12,16 +12,17 @@ export const addMovies = async (req, res) => {
       });
     }
 
-    const posterLocalPath = req.files?.poster?.[0]?.path;
-    if (!posterLocalPath) {
+    const posterBuffer = req.files?.poster?.[0]?.buffer;
+
+    if (!posterBuffer) {
       return res.status(400).json({
         success: false,
-        message: "poster file missing",
+        message: "Poster file missing",
       });
     }
 
-    const poster = await uploadOnCloudinary(posterLocalPath);
-    if (!poster?.url) {
+    const poster = await uploadOnCloudinary(posterBuffer);
+    if (!poster?.secure_url) {
       return res.status(400).json({
         success: false,
         message: "upload poster failed, please try again",
@@ -34,7 +35,7 @@ export const addMovies = async (req, res) => {
       duration,
       ageRating,
       releaseYear,
-      poster: poster.url,
+      poster: poster.secure_url,
     });
 
     return res.status(201).json({
@@ -43,6 +44,7 @@ export const addMovies = async (req, res) => {
       movie,
     });
   } catch (error) {
+    console.log("ERROR", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -99,7 +101,7 @@ export const updateMovie = async (req, res) => {
         description,
         duration,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     return res.json({
@@ -207,7 +209,7 @@ export const getSortedMovies = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movies sorted successfully",
-      movies: movies
+      movies: movies,
     });
   } catch (error) {
     return res.status(500).json({
